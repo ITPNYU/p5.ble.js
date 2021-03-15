@@ -101,7 +101,11 @@ class p5ble {
     const validChar = this.characteristics.find(char => char.uuid === characteristic.uuid);
     if (!validChar) return console.error('The characteristic does not exist.');
 
-    const bufferToSend = Uint8Array.of(inputValue);
+    let bufferToSend;
+    if (typeof inputValue === 'string') {
+      const encoder = new TextEncoder('utf-8');
+      bufferToSend = encoder.encode(inputValue);
+    } else bufferToSend = Uint8Array.of(inputValue);
     console.log(`Writing ${inputValue} to Characteristic...`);
     return characteristic.writeValue(bufferToSend);
   }
