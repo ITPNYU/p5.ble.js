@@ -9881,7 +9881,11 @@ var p5ble = function () {
       });
       if (!validChar) return console.error('The characteristic does not exist.');
 
-      var bufferToSend = Uint8Array.of(inputValue);
+      var bufferToSend = void 0;
+      if (typeof inputValue === 'string') {
+        var encoder = new TextEncoder('utf-8');
+        bufferToSend = encoder.encode(inputValue);
+      } else bufferToSend = Uint8Array.of(inputValue);
       console.log('Writing ' + inputValue + ' to Characteristic...');
       return characteristic.writeValue(bufferToSend);
     }
